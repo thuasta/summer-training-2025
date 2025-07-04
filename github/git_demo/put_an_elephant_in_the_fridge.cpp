@@ -21,10 +21,10 @@ void warning() {
 }
 
 void put_the_elephant_in_the_fridge() {
-    warning();
-    // open_the_fridge();
-    // put_the_elephant_in();
-    // close_the_fridge();
+    // warning();
+    open_the_fridge();
+    put_the_elephant_in();
+    close_the_fridge();
 }
 
 int main() {
