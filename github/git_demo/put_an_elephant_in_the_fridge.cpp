@@ -8,7 +8,7 @@ void open_the_fridge() {
 void put_the_elephant_in() {
     // add code here
     // user B
-    cout << "The elephant is now in the fridge." << endl;
+    cout << "The elephant is now in the fridge, with some bananas." << endl;
 }
 void close_the_fridge() {
     // add code here
