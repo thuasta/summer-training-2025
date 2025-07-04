@@ -1,4 +1,4 @@
-# ASTA 硬件部暑培-Linux & GitHub & SSH & Python
+# ASTA 硬件部暑培-Linux & GitHub & SSH 
 
 > **作者**：王鹤霏(hefei1504@163.com)
 > **日期**：2025年7月
@@ -29,12 +29,28 @@
     # Port 22 # ssh服务监听的端口
     # PermitRootLogin yes # 是否允许root用户登录
     # PasswordAuthentication yes # 是否允许密码登录
-
-    ip -br a # 查看香橙派的IP地址(无线网卡wlan0)
   ```
+- nmcli添加添加 802.1x 认证 wifi 连接校园网
+    ```bash
+      # 在板子终端输入
+      sudo nmcli d wifi # 查看wifi列表
+      sudo nmcli con add type wifi ifname wlan0 con-name Tsinghua-Secure ssid Tsinghua-Secure
+      sudo nmcli con edit Tsinghua-Secure
+       nmcli> set 802-1x.eap peap
+       nmcli> set 802-1x.phase2-auth mschapv2
+       nmcli> set 802-1x.identity <your_id> # 校园网账号
+       nmcli> set 802-1x.password <your_password> # 校园网密码
+       nmcli> set wifi-sec.key-mgmt wpa-eap
+       nmcli> set connection.autoconnect true
+       nmcli> save
+       nmcli> activate
+       nmcli> quit
+    ```
+
 - 在本地电脑上使用ssh连接香橙派
   ```bash
-    ssh root@<香橙派的IP地址> # 使用root用户登录，默认端口22
+    ip -br a # 查看香橙派的IP地址(无线网卡wlan0)
+    ssh root@<香橙派的IP地址> # 本地命令行。使用root用户登录，默认端口22
     # ssh root@<香橙派的IP地址> -p <端口号>  # 如果修改了ssh服务端口，需要指定端口号
     # 默认密码是Mind@123
   ```
@@ -55,7 +71,6 @@ ls
 # -a # 显示所有文件，包括隐藏文件
 # -l # 以长格式显示文件信息
 ```
-#TODO
 
 ### 文件操作
 ```bash
@@ -80,8 +95,14 @@ scp <本地文件> root@<远程IP>:<远程目录> # 将本地文件复制到远�
 ### 线程管理
 ```bash
 # 查看当前运行的进程
+ps aux # 查看所有进程
+# 线程管理
+top # 实时查看系统资源使用情况
+kill <PID> # 终止指定进程
+kill -9 <PID> # 强制终止指定进程
+stop <PID> # 暂停指定进程
+start <PID> # 启动指定进程
 ```
-#TODO
 
 ### 网络
 ```bash
@@ -89,7 +110,8 @@ ip a # 查看网络接口和IP地址。-br  以简洁格式显示
 ping <IP地址或域名> # 测试网络连通性
 nmcli # 网络管理命令行工具 #TODO
 ```
-
+### 设备树与GPIO(硬件部选修)
+参考华为提供的香橙派教程。
 
 
 ## GitHub
@@ -99,6 +121,7 @@ nmcli # 网络管理命令行工具 #TODO
 sudo apt update
 sudo apt-get install git
 ```
+
 ### 配置git
 ```bash
 git config --global user.name "你的GitHub用户名"
@@ -118,6 +141,35 @@ git clone <仓库地址> -b <分支名> # 克隆指定分支的仓库（一般�
 # 这里的地址是SSH地址（git@github.com:<user_name>/<repo_name>.git)
 # 查看远程仓库地址
 git remote -v
+```
+### 实践
+团队协作进行代码开发时，如何使用Git&GitHub进行版本控制和协作开发
+```bash
+git restore --staged <file>..
+git add <file> # 添加文件到暂存区
+git add . # 添加当前目录下的所有文件到暂存区
+git status # 查看当前工作区和暂存区的状态
+git commit -m "提交信息" # 提交到本地仓库   
+git pull origin main # 从远程仓库拉取最新代码到本地
+git push --set-upstream origin main  
+git checkout -b <新分支名> # 创建并切换到新分支
+# 等于：
+# git branch <新分支名> # 创建新分支
+# git switch <新分支名> # 切换到新分支
+git merge <分支名> # 合并指定分支到当前分支
+# 如果有冲突，需要手动解决冲突后，git add <file>.. # 添加解决冲突后的文件到暂存区
+git commit -m "解决冲突" # 提交解决冲突后的代码
+# 完成dev分支的开发后，将dev分支合并到main分支
+git checkout main # 切换到main分支
+git merge --squash dev # 将dev分支的提交合并到main分支，但不保留dev分支的提交历史
+git push origin main # 将main分支推送到远程仓库
+
+git checkout <commit id> # 分离指针头，查看某个历史提交的代码
+git checkout -b <新分支名> <commit id> # 从某个历史提交创建新分支
+git rebase <分支名> # 将当前分支的提交应用到指定分支上
+git log # 查看提交历史
+git log --oneline # 以单行格式查看提交历史
+git push origin rollback:main --force-with-lease # 强制推送回滚到某个提交
 ```
 
 ## Markdown语法
@@ -154,9 +206,6 @@ print("Hello, World!")
 ### VS Code 编辑器
 - 推荐安装 Markdown All in One, 
 - 其他还有Markdown Preview Github Styling，Markdown Preview Mermaid Support, markdownlint, Markdown PDF, Markdown+Math等插件
-
-## Python基础
-
 
 ## Overleaf和Latex基础
 [Overleaf](https://www.overleaf.com/) 是一个在线的 LaTeX 编辑器。  
