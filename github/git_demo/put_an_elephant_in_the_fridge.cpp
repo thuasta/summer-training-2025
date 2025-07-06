@@ -12,7 +12,7 @@ void put_the_elephant_in() {
 
 void close_the_fridge() {
     // add code here
-    // user B
+	cout <<"close the door"<<endl;
 }
 
 void warning() {
