@@ -1,0 +1,8 @@
+# Python依赖包
+opencv-python>=4.5.0
+numpy>=1.19.0
+PyYAML>=5.4.0
+
+# 可选依赖（用于实际硬件）
+# HiwonderSDK  # 实际项目中的硬件SDK
+# Board        # 硬件控制板驱动

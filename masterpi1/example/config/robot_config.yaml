@@ -1,0 +1,86 @@
+# 机器人配置文件
+# 使用YAML格式，便于人工编辑和版本控制
+
+# 视觉处理配置
+vision:
+  image_width: 640
+  image_height: 480
+  roi_regions:
+    - [240, 280, 0, 640, 0.1]  # [y1, y2, x1, x2, weight]
+    - [340, 380, 0, 640, 0.3]
+    - [430, 460, 0, 640, 0.6]
+  
+  # 颜色阈值配置
+  color_thresholds:
+    red:
+      lab_min: [0, 127, 127]
+      lab_max: [255, 255, 255]
+    blue:
+      lab_min: [0, 127, 0]
+      lab_max: [255, 255, 127]
+    green:
+      lab_min: [0, 0, 127]
+      lab_max: [255, 127, 255]
+    black:
+      lab_min: [0, 0, 0]
+      lab_max: [46, 255, 255]
+
+# 电机控制配置
+motor:
+  base_speed: 50
+  max_speed: 100
+  min_speed: 20
+  
+  # PID参数
+  pid_p: 0.28
+  pid_i: 0.16
+  pid_d: 0.18
+
+# 机械臂配置
+arm:
+  # 舵机位置配置
+  servo_positions:
+    red: [-12, 12, 2]
+    green: [0, 8, 10]
+    blue: [-12, 20, 2]
+    capture: [0, 8, 10]
+  
+  # 夹持器配置
+  grab_servo_angle: 1350
+  release_servo_angle: 1500
+  
+  # 默认位置
+  default_position: [0, 7, 11]
+  pitch_angle: -60
+  yaw_angle: -90
+
+# 任务配置
+task:
+  # 巡逻序列配置
+  patrol_sequence:
+    - [["red"], 0, 3]           # 红色循线，任务3
+    - [["black"], 0, 19]        # 黑色循线，任务19
+    - [["red", "black"], 0, 28] # 红黑双色循线，任务28
+    - [["red"], 0, 81]          # 红色循线，任务81
+    - [["blue"], 0, 82]         # 蓝色循线，任务82
+    - [["red", "black"], 0, 21] # 红黑双色循线，任务21
+    - [["red"], 0, 22]          # 红色循线，任务22
+    - [["red", "black"], 0, 23] # 红黑双色循线，任务23
+    - [["red"], 1, 0]           # 红色循线，模式1
+    - [["blue"], 1, 0]          # 蓝色循线，模式1
+    - [["blue"], 1, 54]         # 蓝色循线，任务54
+    - [["blue"], 0, 0]          # 蓝色循线，模式0
+    - [["black"], 0, 47]        # 黑色循线，任务47
+    - [["black"], 0, 0]         # 黑色循线，模式0
+    - [["blue"], 1, 0]          # 蓝色循线，模式1
+    - [["red"], 1, 6]           # 红色循线，任务6
+  
+  max_retries: 3
+  task_timeout: 30.0
+
+# 系统配置
+system:
+  max_workers: 4
+  log_level: "INFO"
+  log_file: "logs/robot.log"
+  enable_debug: false
