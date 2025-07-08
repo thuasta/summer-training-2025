@@ -105,6 +105,7 @@ RuntimeError: Channel 31 is already configured
 解决方法： 
 这是OPi.GPIO库在设置GPIO端口时的一个底层冲突，解决方法是在库文件里注释掉相关的异常抛出代码。 
 文件绝对路径：`/usr/local/miniconda3/lib/python3.9/site-packages/OPi/GPIO.py`第468，469行
+【如果有conda环境，就会是例如`/usr/local/miniconda3/envs/masterpi/lib/python3.9/site-packages/OPi/GPIO.py`这样的位置】
 ```python
 if channel in  exports:
     raise RuntimeError("channel {0} is already configured".format(channel))
