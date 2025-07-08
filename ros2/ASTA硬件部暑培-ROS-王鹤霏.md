@@ -35,10 +35,10 @@
     ```bash
     # 安装小乌龟
     sudo apt update
-    sudo apt install ros-jazzy-turtlesim
+    sudo apt install ros-humble-turtlesim
     # 安装rqt
     sudo apt update
-    sudo apt install '~nros-jazzy-rqt*'
+    sudo apt install '~nros-humble-rqt*'
     # 检查软件包是否安装成功
     ros2 pkg executables turtlesim
     # 运行小乌龟
@@ -159,12 +159,14 @@ git clone https://github.com/ros2/examples src/examples -b humble
 >- **Underlay**：是指基础工作空间，通常包含系统级的 ROS2 安装和一些通用的包。Underlay 工作空间通常是只读的，不会修改其内容。
 >- **Overlay**：是指在 Underlay 基础上构建的工作空间，可以包含用户自定义的包和代码。Overlay 工作空间可以修改其内容，并且可以覆盖 Underlay 中的包。  
 >(阅读下面指令的WARNING输出会看到相关信息)
+> 在source工作空间时，`source install/setup.bash`会将Underlay工作空间的环境变量加载到当前shell中，并source install/local_setup.bash文件,后者会将Overlay工作空间的环境变量加载到当前shell中。从而可以在shell中通过`ros2 run`命令访问Underlay和Overlay工作空间中的包和节点的可执行文件（位于`install/lib`目录下）。
 
 通过指定`--symlink-install`选项，可以在install目录中创建源文件(src中文件)的符号链接，而不是复制文件。从而在修改源代码中的非编译部分(如Python脚本,配置文件)时，无需重新编译工作空间即可生效。可以提高开发效率.  
 而`--executor sequential`选项则是指定使用顺序地执行构建任务,而非并行执行,从而可以在I/O,CPU,RAM资源受限的设备上避免出现资源竞争导致屏幕/鼠标卡顿的情况.  (如树莓派,香橙派等设备上)  
 ```bash
 colcon build --symlink-install --executor sequential
 ```
+`--packages-up-to <package name>` builds the package you want, plus all its dependencies, but not the whole workspace (saves time)
 
 ```bash
 # source 工作空间
@@ -177,4 +179,34 @@ ros2 run examples_rclcpp_minimal_subscriber subscriber_member_function
 # 开一个新的终端窗口，source工作空间
 source install/setup.bash
 ros2 run examples_rclcpp_minimal_publisher publisher_member_function
+```
+
+### 理解ROS2包的结构
+
+#### cpp包
+```bash
+package_folder/
+├── CMakeLists.txt # CMake构建脚本,描述如何编译和链接包，可执行文件的名称和依赖项
+├── package.xml # metadata文件，描述包的名称、版本、依赖等信息
+|── include/<package_name>/ # 头文件目录
+|   └── <header_files>.hpp # 头文件
+├── src/ # 源代码目录
+|   └── <source_files>.cpp # 源代码文件
+```
+#### python包
+```bash
+package_folder/
+├── package.xml # metadata文件，描述包的名称、版本、依赖等信息
+├── setup.cfg # Python包的配置文件，包含包的元数据和依赖项
+├── setup.py # Python包的安装脚本，包含包的元数据和安装指令
+├── resource/<package_name> # 包的资源目录，包含包的资源文件
+├── <package_name>/ # 包的主目录，包含包的代码和资源  
+|   ├── __init__.py # 包的初始化文件，标识该目录为Python包, 可以为空，但必须存在
+|   └── <module_files>.py # 包的模块文件，包含包的代码，一般每个Node一个模块文件,文件中的main(也可以是别的函数，在setup.py中指定)函数可以作为节点的入口点
+```
+### 创建和使用包
+```bash
+# 在工作空间的src目录下创建一个新的包
+ros2 pkg create --build-type ament_cmake --license Apache-2.0 <package_name>
+ros2 pkg create --build-type ament_python --license Apache-2.0 <package_name>
 ```
