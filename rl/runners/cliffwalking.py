@@ -14,7 +14,7 @@ def main():
                        help='选择算法: sarsa, qlearning 或 dqn (默认: sarsa)')
     parser.add_argument('--episodes', '-e', 
                        type=int, 
-                       default=2000,
+                       default=1000,
                        help='训练回合数 (默认: 1000)')
     parser.add_argument('--epsilon', 
                        type=float, 
@@ -32,9 +32,9 @@ def main():
     args = parser.parse_args()
     
     # 训练时不需要渲染，速度更快
-    env_train = gym.make('CliffWalking-v0')
+    env_train = gym.make('CliffWalking-v1')
     # 测试时使用图形渲染
-    env_test = gym.make('CliffWalking-v0', render_mode='human')
+    env_test = gym.make('CliffWalking-v1', render_mode='human')
 
 
     # 根据用户选择创建智能体

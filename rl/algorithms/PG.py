@@ -62,7 +62,7 @@ class PGAgent(nn.Module):
 #这里我用stack转换tensor导致训练失败 debug半小时 纯逆天 读者可以考虑一下为啥
         log_probs = torch.cat(self.log_probs)# 将 log_probs 转换为张量
 
-        print(f"log_probs: {log_probs.shape}")
+
         loss = -(log_probs * returns).sum()
 
 

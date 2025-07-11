@@ -17,6 +17,5 @@ echo "python -m rl.runners.cliffwalking -a sarsa -e 3000 --epsilon 0.1 --alpha 0
 echo
 
 echo "正在运行DQN算法..."
-# 从项目根目录运行
-cd /Users/zhangboshi/Downloads/github/ASTA-Summer-train-2025
+
 python -m rl.runners.cliffwalking --algorithm dqn

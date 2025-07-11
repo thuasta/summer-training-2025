@@ -27,7 +27,7 @@ def main():
     )
     
     print("开始训练...")
-    episode_rewards = MyAgent.train(env, episodes=1000, print_every=20,update_timestep=2000)
+    episode_rewards = MyAgent.train(env, episodes=800, print_every=20,update_timestep=2000)
     # 测试智能体
     print("\n开始测试训练后的智能体...")
     env_test = gym.make('LunarLander-v3', render_mode='human')
